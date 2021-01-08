@@ -19,3 +19,6 @@ connect to raspberry pi folder system: pi@192.168.4.1
 password from ipad: 761476
 
 Change the port (list of free ports)
+
+Добавить ещё один поток, для передачи изображения. При однопоточности поток изображения встаёт.
+В EV_streamer_viewer_2.1 передавать одновременно изображение и данные от dualshock

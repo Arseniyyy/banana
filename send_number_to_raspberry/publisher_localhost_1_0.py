@@ -13,9 +13,8 @@ footage_socket = context.socket(zmq.PUB)
 footage_socket.bind("tcp://*:%s" % port)
 
 while True:
-    arr = [1, 2, 3, 4] 
-    p = pickle.dumps(arr, protocol=-1)
+    string = 'op' 
+    p = pickle.dumps(string, protocol=-1)
     footage_socket.send(p)
     time.sleep(1)
-
     print('sent')
