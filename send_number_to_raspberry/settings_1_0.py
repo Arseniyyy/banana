@@ -1,1 +1,3 @@
+# All settings for send_number_to_raspberry folder
+
 PORT = 5555
