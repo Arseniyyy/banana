@@ -3,19 +3,19 @@ import time
 import pickle
 import cv2
 import threading
-
-fps = 60
-
+from settings_1_0 import RASEPBERRY_PI_IP, PORT, FPS
 
 
-class Send_data_from_camera():
+img_row, img_col = 320, 240
+
+class Publisher():
     """Receive data from laptop's camera"""
     def __init__(self, src=0):
         """Iniitiates the class"""
         self.capture = cv2.VideoCapture(src)
         self.capture.set(cv2.CAP_PROP_FPS, 60)
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, img_row)
+        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, img_col)
         self.thread = threading.Thread(target=self.update, args=())
         self.thread.daemon = True
         self.thread.start()
@@ -44,10 +44,10 @@ class Send_data_from_camera():
 
 
 if __name__ == "__main__":
-    pub_instance = Send_data_from_camera(src=0)
+    pub_instance = Publisher(src=0)
 
     # socket creating
-    pub_socket = pub_instance.create_pub_socket(zmq.PUB, 5555)
+    pub_socket = pub_instance.create_pub_socket(zmq.PUB, PORT)
     
     while True:
         frame = pub_instance.get_frame()
@@ -62,5 +62,5 @@ if __name__ == "__main__":
             # time.sleep(1)
     
          # cv2.waitKey(<не должно быть равно 0>)
-        if cv2.waitKey(int(60)) == ord('q'):
+        if cv2.waitKey(FPS) == ord('q'):
             break

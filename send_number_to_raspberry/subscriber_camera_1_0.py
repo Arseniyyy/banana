@@ -6,7 +6,7 @@ from settings_1_0 import RASEPBERRY_PI_IP, PORT, FPS
 from publisher_camera_1_0 import Publisher
 
 
-img_row, img_col = 300, 300
+img_row, img_col = 320, 240
 
 cap = cv2.VideoCapture(0)
 ret, frame1 = cap.read()
@@ -19,7 +19,7 @@ class Subscriber:
         self.socket_type = socket_type
         self.port = port
 
-        self.create_sub_socket('localhost')
+        self.create_sub_socket(RASEPBERRY_PI_IP)
 
         self.thread = threading.Thread(target=self.threaded, args=())
         self.thread.daemon = True
@@ -34,7 +34,8 @@ class Subscriber:
         self.socket.setsockopt_string(zmq.SUBSCRIBE, np.unicode(''))
 
     def main(self):
-        """Main function. Starts all other functions"""    
+        """Main function. Starts all other functions"""
+        self.show_frame()
         self.optical_flow()
 
     def threaded(self):
@@ -44,35 +45,37 @@ class Subscriber:
             self.npimg = np.frombuffer(self.frame, dtype=np.uint8)
             self.source = cv2.imdecode(self.npimg, flags=1)
 
+    def show_frame(self):
+        """Shows frame"""
+        try:
             cv2.imshow('frame', self.source)
 
             if cv2.waitKey(FPS) == ord('q'):
-                break
+                cv2.destroyAllWindows()
+                exit(1)
 
-    def show_frame(self):
-        """Shows frame"""
-        cv2.imshow('frame', self.source)
-
-        if cv2.waitKey(FPS) == ord('q'):
-            cv2.destroyAllWindows()
-            exit(1)
+        except AttributeError:
+            return
 
     def optical_flow(self):
         """Creates optical flow"""
-        print(self.source)
-        next_frame = cv2.cvtColor(self.source, cv2.COLOR_BGR2GRAY)
+        try:
+            next_frame = cv2.cvtColor(self.source, cv2.COLOR_BGR2GRAY)
 
-        flow = cv2.calcOpticalFlowFarneback(prvs, next_frame, None, 0.5, 1, 15, 1, 5, 1.2, 0)
+            flow = cv2.calcOpticalFlowFarneback(prvs, next_frame, None, 0.5, 1, 15, 1, 5, 1.2, 0)
 
-        dvx = -np.ma.average(flow[..., 0])
-        dvy = -np.ma.average(flow[..., 1])
+            dvx = -np.ma.average(flow[..., 0])
+            dvy = -np.ma.average(flow[..., 1])
 
-        print(f'dvx: {dvx}')
-        print(f'dvy: {dvy}')
+            print(f'dvx: {dvx}')
+            print(f'dvy: {dvy}')
+
+        except Exception:
+            return
 
 
 if __name__ == "__main__":
     sub_instance = Subscriber(PORT, zmq.SUB) # defining the port #1
 
     while True:
-        sub_instance.show_frame()
+        sub_instance.main()
