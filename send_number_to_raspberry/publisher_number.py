@@ -15,10 +15,12 @@ class Publiher_number:
         socket.bind(f"tcp://*:{self.port}")
 
         while True:
-            topic = random.randrange(9999,10005)
-            messagedata = random.randrange(1,215) - 80
+            # topic = random.randrange(9999,10005)
+            # messagedata = random.randrange(1,215) - 80
 
-            socket.send_string(f"{topic} {messagedata}")
+            n = 2345
+
+            socket.send_string(f"{n}")
 
             # time.sleep(1)
 
