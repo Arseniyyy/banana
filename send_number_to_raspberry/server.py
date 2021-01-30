@@ -1,50 +1,25 @@
 import socket
-import threading
-from settings_1_0 import PORT_2
+from settings import PORT, HOST
 
+class Server:
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
 
-# Самые используемые протоколы: я tcp, ip, udp
-# AF - address family. SOCK_STREAM - протокол
+    def define(self):
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server.bind((self.host, self.port))
+        self.server.listen()
 
-# class Socket_server:
-#     def __init__(self, host, port):
-#         self.host = host
-#         self.port = port
-    
-#     def socket_bind(self):
-#         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#         self.server.bind((self.host, self.port))
+    def main(self):
+        while True:
+            sock, address = self.server.accept()
+            sock.send('You are connected'.encode('utf-8'))
 
-#         # server.listen() говорит, что можно принимать входящие сообщения
-#         self.server.listen()
+            print('Sending...')
 
-#     def main(self):
-#             # Принимает входящие сообщения
-#         sock, address = self.server.accept()
-#         sock.send('You are connected'.encode('utf-8'))
+if __name__ == '__main__':
+    server = Server(HOST, PORT)
 
-#         print('Sending...')
-
-# if __name__ == '__main__':
-#     socket_server = Socket_server('', PORT_2)
-#     socket_server.socket_bind()
-
-#     while True:
-#         socket_server.main()
-
-
-
-
-
-
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('', PORT_2))
-server.listen()
-
-
-while True:
-    sock, address = server.accept()
-    sock.send('You are connected'.encode('utf-8'))
-
-    print('Sending...')
+    server.define()
+    server.main()
