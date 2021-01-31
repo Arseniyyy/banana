@@ -15,22 +15,22 @@ frame1 = cv2.resize(frame1, (img_row, img_col))
 prvs = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
 
 class Subscriber:
-    def __init__(self, port, socket_type):
-        self.socket_type = socket_type
+    def __init__(self, host, port):
+        self.host = host
         self.port = port
 
-        self.create_sub_socket(RASEPBERRY_PI_IP)
+        self.create_sub_socket()
 
         self.thread = threading.Thread(target=self.threaded, args=())
         self.thread.daemon = True
         self.thread.start()
 
-    def create_sub_socket(self, ip):
-        """Creates sub socket. ip default set to localhost"""
+    def create_sub_socket(self):
+        """Creates sub socket"""
         ctx = zmq.Context()
 
-        self.socket = ctx.socket(self.socket_type)
-        self.socket.connect(f'tcp://{ip}:{self.port}')
+        self.socket = ctx.socket(zmq.SUB)
+        self.socket.connect(f'tcp://{self.host}:{self.port}')
         self.socket.setsockopt_string(zmq.SUBSCRIBE, np.unicode(''))
 
     def main(self):
@@ -72,10 +72,3 @@ class Subscriber:
 
         except Exception:
             return
-
-
-if __name__ == "__main__":
-    sub_instance = Subscriber(PORT, zmq.SUB) # defining the port #1
-
-    while True:
-        sub_instance.main()
