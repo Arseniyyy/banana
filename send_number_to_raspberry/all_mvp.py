@@ -4,9 +4,9 @@
 # subscriber_camera - получает изображения с камеры, подключённой к raspberry
 # server - сразу же после получения изображения посылает на raspberry число
 
-from settings_1_0 import PORT, RASEPBERRY_PI_IP, PORT_2
-from subscriber_camera_1_0 import Subscriber
-from client_echo import Client
+from settings_1_1 import PORT, RASEPBERRY_PI_IP, PORT_2
+from subscriber_camera_1_1 import Subscriber
+from client_echo_4_raspberry_1_1 import Client
 
 if __name__ == '__main__':
     subscriber = Subscriber(RASEPBERRY_PI_IP, PORT)
@@ -17,4 +17,3 @@ if __name__ == '__main__':
     while True:
         subscriber.main()
         client.main()
- 
