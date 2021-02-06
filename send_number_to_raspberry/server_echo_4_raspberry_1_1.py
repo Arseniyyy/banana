@@ -14,8 +14,7 @@ class Server:
             self.conn, self.addr = s.accept()
 
     def main(self):    
-        data = self.conn.recv(4)
-        print(data.decode('utf-8'))
+        data = self.conn.recv(1024)
 
         return data.decode('utf-8')
 

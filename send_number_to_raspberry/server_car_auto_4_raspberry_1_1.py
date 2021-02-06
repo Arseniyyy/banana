@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 # for raspberry
-# TODO: -c 17
+# start this file with the parameter equals -c 17
 import argparse
 import time
 import os

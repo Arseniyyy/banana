@@ -6,6 +6,7 @@ import numpy as np
 from settings_1_1 import RASEPBERRY_PI_IP, PORT, FPS
 from publisher_camera_4_raspberry_1_1 import Publisher
 from PID_function_1_1 import PID
+from decimal import Decimal
 
 
 img_row, img_col = 320, 240
@@ -16,7 +17,7 @@ ret, frame1 = cap.read()
 frame1 = cv2.resize(frame1, (img_row, img_col))
 prvs = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
 
-speed_ref = 0.2
+speed_ref = 0.0
 speed_ref_max = 0.1
 oldmin = -1.6
 oldmax = 1.6
@@ -59,7 +60,9 @@ class Subscriber:
     def main(self):
         """Main function. Starts all other functions"""
         self.show_frame()
-        self.optical_flow(dvy_f, If)
+        pwm = self.optical_flow(dvy_f, If)
+
+        return pwm
 
     def threaded(self):
         """Get an image from PUBLISHER"""
@@ -106,9 +109,14 @@ class Subscriber:
             # f - филтр
             Uf, Pf, If, Df = PID(speed_ref, dvy_f, 1, -1,
                                  0.02, 6, 0.015, Integral=If, dt=dt)
-            speed = (((Uf - oldminf) * newrangef) / oldrangef) + newminf
+            print(dvy_f)
 
-            print(f'speed: {speed}')
+            # pwm - pulse width modulation
+            pwm: float = (((Uf - oldminf) * newrangef) / oldrangef) + newminf
+
+            print(pwm)
+
+            return pwm
             # ---
 
         except AttributeError:

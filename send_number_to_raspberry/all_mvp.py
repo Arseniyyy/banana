@@ -8,6 +8,7 @@ from settings_1_1 import PORT, RASEPBERRY_PI_IP, PORT_2
 from subscriber_camera_1_1 import Subscriber
 from client_echo_4_raspberry_1_1 import Client
 
+
 if __name__ == '__main__':
     subscriber = Subscriber(RASEPBERRY_PI_IP, PORT)
     client = Client(RASEPBERRY_PI_IP, PORT_2)
@@ -15,5 +16,5 @@ if __name__ == '__main__':
     client.define_client_socket()
 
     while True:
-        subscriber.main()
-        client.main()
+        pwm = subscriber.main()
+        client.main(pwm)
