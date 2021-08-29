@@ -1,7 +1,14 @@
-Взять изображение (файлы из папки EV_streamer_viewer_2.1) и прогнать его через optical flow
+# banana
 
-Формула:
-    angle = (((angle_rad - oldmin) * newrange) / oldrange) + newmin
-    speed = (((Uf - oldminf) * newrangef) / oldrangef) + newminf
+A repo that contains code for the [eyecar](https://avt.global) car.
 
-electronics_lab: 35993209
+## How to run?
+On a Raspberry PI run:
+```python
+python3 all_4_raspberry.py
+```
+---
+On a PC:
+```python
+python3 all_mvp.py
+```
